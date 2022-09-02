@@ -1,25 +1,88 @@
 use std::io::{stdout, Write};
+use std::time::Duration;
+use std::thread::sleep;
 use crossterm::{
-    execute, terminal::{*, clear},
+    execute, terminal::{Clear},
     style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor},
     ExecutableCommand, Result,
     event,
 };
+use crossterm::event::{
+    poll, KeyboardEnhancementFlags, PopKeyboardEnhancementFlags, PushKeyboardEnhancementFlags, read, DisableBracketedPaste, DisableFocusChange, DisableMouseCapture, EnableBracketedPaste, EnableFocusChange, EnableMouseCapture, Event, KeyCode,
+};
+use crossterm::{
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode},
+    Result,
+};
+
+use termimad;
+
+mod slides;
+
+// Let the code begin
 
 fn main() -> Result<()> {
+    println!("{}", slides::mainslides);
+
+    enable_raw_mode()?;
+
+    let mut stdout = stdout();
+    execute!(
+        stdout,
+        EnableBracketedPaste,
+        EnableFocusChange,
+        EnableMouseCapture,
+        PushKeyboardEnhancementFlags(
+            KeyboardEnhancementFlags::DISAMBIGUATE_ESCAPE_CODES
+                | KeyboardEnhancementFlags::REPORT_ALL_KEYS_AS_ESCAPE_CODES
+                | KeyboardEnhancementFlags::REPORT_EVENT_TYPES
+        )
+    )?;
+
+    if let Err(e) = read_events() {
+        println!("Error: {:?}\r", e);
+    }
 
     execute!(
-        stdout(),
-        SetForegroundColor(Color::White),
-        SetBackgroundColor(Color::Black),
-        Print("██████╗░██╗██╗░░░░░██╗░░░░░██╗░░░██╗ ████████╗██╗░░██╗███████╗ ██╗░░██╗██╗██████╗░
-               ██╔══██╗██║██║░░░░░██║░░░░░╚██╗░██╔╝ ╚══██╔══╝██║░░██║██╔════╝ ██║░██╔╝██║██╔══██╗
-               ██████╦╝██║██║░░░░░██║░░░░░░╚████╔╝░ ░░░██║░░░███████║█████╗░░ █████═╝░██║██║░░██║
-               ██╔══██╗██║██║░░░░░██║░░░░░░░╚██╔╝░░ ░░░██║░░░██╔══██║██╔══╝░░ ██╔═██╗░██║██║░░██║
-               ██████╦╝██║███████╗███████╗░░░██║░░░ ░░░██║░░░██║░░██║███████╗ ██║░╚██╗██║██████╔╝
-               ╚═════╝░╚═╝╚══════╝╚══════╝░░░╚═╝░░░ ░░░╚═╝░░░╚═╝░░╚═╝╚══════╝ ╚═╝░░╚═╝╚═╝╚═════╝░"),
-        ResetColor
+        stdout,
+        DisableBracketedPaste,
+        PopKeyboardEnhancementFlags,
+        DisableFocusChange,
+        DisableMouseCapture
     )?;
+
+    disable_raw_mode()
+}
+
+
+fn read_events() -> Result<()> {
+    loop {
+        let event = read()?;
+        let pub mut curslidecnt=1;
+
+        println!("Event: {:?}\r", event);
+
+        match event {
+            Event::Key(KeyCode::Enter.into()) =>
+                Clear;
+                curslidecnt = curslidecnt++;
+                slides::autocheck();,
+            Event::Key(KeyCode::Char('s').into()) =>
+        }
+
+        if event == Event::Key(KeyCode::Enter.into()) {
+        }
+
+        if event == Event::Key(KeyCode::Char('s').into()) {
+            slides::sources();
+        }
+
+        if event == Event::Key(KeyCode::Esc.into()) {
+            curslidecnt = 2147483647;
+            slides::autocheck();
+        }
+    }
 
     Ok(())
 }
