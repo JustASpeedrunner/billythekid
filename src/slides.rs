@@ -6,8 +6,9 @@ pub fn autocheck(&mut sldnum:i32) {
         3 => fourth(),
         4 => fifth(),
         5 => sixth(),
+        6 => sources(),
 
-        2147483647 => goodbye();
+        2147483647 => goodbye(),
     }
 }
 
@@ -92,7 +93,10 @@ pub fn goodbye() {
 
 pub fn sources() {
     let mut skin = MadSkin::default();
-    skin.print_inline("*Hey* **World!** Here's `some(code)`");
     skin.header.add_attr(Underlined);
     println!("# Sources\n\"Absolute Mad Lads - Billy the Kid\" YouTube, uploaded by Count Dankula, 13-12-2019, https://www.youtube.com/watch?v=QjWqfV3j-eY\nGarrett, Pat F. (1882). The Authentic Life of Billy, the Kid (1st ed.). Santa Fe, New Mexico: New Mexican Printing and Publishing Company. OCLC 748293298.\n[Billy the Kid photograph taken by Ben Wittick in 1879 or 1880.](https://commons.wikimedia.org/wiki/File:Billy_the_Kid_tintype,_Fort_Sumner,_1879-80-Edit2.jpg)");
+}
+
+pub fn err() {
+    println!("This is not a valid value, please try again.");
 }

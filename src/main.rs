@@ -1,3 +1,8 @@
+
+// -----------------------------------------------------------------
+// Import sh-, oh wait this is a school project, import stuff. Yeah, stuff.
+// -----------------------------------------------------------------
+
 use std::io::{stdout, Write};
 use std::time::Duration;
 use std::thread::sleep;
@@ -20,7 +25,9 @@ use termimad;
 
 mod slides;
 
+// -----------------------------------------------------------------
 // Let the code begin
+// -----------------------------------------------------------------
 
 fn main() -> Result<()> {
     println!("{}", slides::mainslides);
@@ -64,23 +71,16 @@ fn read_events() -> Result<()> {
         println!("Event: {:?}\r", event);
 
         match event {
-            Event::Key(KeyCode::Enter.into()) =>
+            Event::Key(KeyCode::Enter.into()) => 
                 Clear;
-                curslidecnt = curslidecnt++;
-                slides::autocheck();,
-            Event::Key(KeyCode::Char('s').into()) =>
-        }
-
-        if event == Event::Key(KeyCode::Enter.into()) {
-        }
-
-        if event == Event::Key(KeyCode::Char('s').into()) {
-            slides::sources();
-        }
-
-        if event == Event::Key(KeyCode::Esc.into()) {
-            curslidecnt = 2147483647;
-            slides::autocheck();
+                match curslidecnt {
+                    1..=5 => curslidecnt = curslidecnt++; slides::autocheck();
+                    cur if cur > 6 => slides::mainslide();    
+                },
+            Event::Key(KeyCode::Char('s').into()) => slides::sources(),
+            Event::Key(KeyCode::Esc.into()) => 
+                curslidecnt = 2147483647;
+                slides::autocheck();
         }
     }
 
