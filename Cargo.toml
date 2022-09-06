@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 crossterm = "0.25.0"
-termimad = "0.14"
+clearscreen = "1.0.10"

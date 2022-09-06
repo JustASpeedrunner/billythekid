@@ -1,36 +1,28 @@
+// -----------------------------------------------------------------
+// Just a line to build for Michaelsoft Binbows so I don't forget
+// cargo build --target x86_64-pc-windows-gnu
+// -----------------------------------------------------------------
 
 // -----------------------------------------------------------------
 // Import sh-, oh wait this is a school project, import stuff. Yeah, stuff.
 // -----------------------------------------------------------------
 
-use std::io::{stdout, Write};
-use std::time::Duration;
-use std::thread::sleep;
+use std::io::{stdout};
+use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use crossterm::{
-    execute, terminal::{Clear},
-    style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor},
-    ExecutableCommand, Result,
-    event,
+    execute, Result,
 };
 use crossterm::event::{
-    poll, KeyboardEnhancementFlags, PopKeyboardEnhancementFlags, PushKeyboardEnhancementFlags, read, DisableBracketedPaste, DisableFocusChange, DisableMouseCapture, EnableBracketedPaste, EnableFocusChange, EnableMouseCapture, Event, KeyCode,
+    KeyboardEnhancementFlags, PopKeyboardEnhancementFlags, PushKeyboardEnhancementFlags, read, DisableBracketedPaste, DisableFocusChange, EnableBracketedPaste, EnableFocusChange, Event, KeyCode,
 };
-use crossterm::{
-    execute,
-    terminal::{disable_raw_mode, enable_raw_mode},
-    Result,
-};
-
-use termimad;
-
-mod slides;
+    mod slides;
 
 // -----------------------------------------------------------------
 // Let the code begin
 // -----------------------------------------------------------------
 
 fn main() -> Result<()> {
-    println!("{}", slides::mainslides);
+    slides::mainslide();
 
     enable_raw_mode()?;
 
@@ -39,7 +31,6 @@ fn main() -> Result<()> {
         stdout,
         EnableBracketedPaste,
         EnableFocusChange,
-        EnableMouseCapture,
         PushKeyboardEnhancementFlags(
             KeyboardEnhancementFlags::DISAMBIGUATE_ESCAPE_CODES
                 | KeyboardEnhancementFlags::REPORT_ALL_KEYS_AS_ESCAPE_CODES
@@ -56,7 +47,6 @@ fn main() -> Result<()> {
         DisableBracketedPaste,
         PopKeyboardEnhancementFlags,
         DisableFocusChange,
-        DisableMouseCapture
     )?;
 
     disable_raw_mode()
@@ -66,23 +56,26 @@ fn main() -> Result<()> {
 fn read_events() -> Result<()> {
     loop {
         let event = read()?;
-        let pub mut curslidecnt=1;
+        let mut curslidecnt = 1;
+        println!("{:?}",event);
 
-        println!("Event: {:?}\r", event);
-
-        match event {
-            Event::Key(KeyCode::Enter.into()) => 
-                Clear;
-                match curslidecnt {
-                    1..=5 => curslidecnt = curslidecnt++; slides::autocheck();
-                    cur if cur > 6 => slides::mainslide();    
-                },
-            Event::Key(KeyCode::Char('s').into()) => slides::sources(),
-            Event::Key(KeyCode::Esc.into()) => 
-                curslidecnt = 2147483647;
-                slides::autocheck();
+        if event == Event::Key(KeyCode::Enter.into()) {
+            if let 1..=5 = curslidecnt {
+                curslidecnt += 1;
+                slides::autocheck(curslidecnt);
+            } else if curslidecnt > 6 {
+                slides::mainslide();
+            };
+        }
+        if event == Event::Key(KeyCode::Esc.into()) {
+            curslidecnt = 2147483647;
+            slides::autocheck(curslidecnt);
+            break;
+        }
+        if event == Event::Key(KeyCode::Char('s').into()) {
+            curslidecnt = 6;
+            slides::autocheck(curslidecnt);
         }
     }
-
-    Ok(())
+Ok(())
 }
