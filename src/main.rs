@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------
 // Just a line to build for Michaelsoft Binbows so I don't forget
-// cargo build --target x86_64-pc-windows-gnu
+// cargo build --target x86_64-pc-windows-gnu --release
 // -----------------------------------------------------------------
 
 // -----------------------------------------------------------------
