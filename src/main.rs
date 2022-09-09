@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------
 // Just a line to build for Michaelsoft Binbows so I don't forget
-// cargo build --target x86_64-pc-windows-gnu --release
+// cargo build --target x86_64-pc-windows-gnu
 // -----------------------------------------------------------------
 
 // -----------------------------------------------------------------
@@ -8,20 +8,22 @@
 // -----------------------------------------------------------------
 
 use std::io::{stdout};
-use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
+use crossterm::terminal::{disable_raw_mode, enable_raw_mode, SetSize};
 use crossterm::{
     execute, Result,
 };
 use crossterm::event::{
     KeyboardEnhancementFlags, PopKeyboardEnhancementFlags, PushKeyboardEnhancementFlags, read, DisableBracketedPaste, DisableFocusChange, EnableBracketedPaste, EnableFocusChange, Event, KeyCode,
 };
-    mod slides;
+mod slides;
 
 // -----------------------------------------------------------------
 // Let the code begin
 // -----------------------------------------------------------------
 
 fn main() -> Result<()> {
+    SetSize(109,100);
+
     slides::mainslide();
 
     enable_raw_mode()?;
@@ -54,28 +56,30 @@ fn main() -> Result<()> {
 
 
 fn read_events() -> Result<()> {
+    let mut curslidecnt = 0;
     loop {
         let event = read()?;
-        let mut curslidecnt = 1;
         println!("{:?}",event);
 
         if event == Event::Key(KeyCode::Enter.into()) {
-            if let 1..=5 = curslidecnt {
+            if let 0..=5 = curslidecnt {
                 curslidecnt += 1;
                 slides::autocheck(curslidecnt);
-            } else if curslidecnt > 6 {
-                slides::mainslide();
+            } else if curslidecnt >= 6 {
+                curslidecnt = 0;
+                clearscreen::clear().expect("err");
+                slides::autocheck(curslidecnt);
             };
-        }
+        };
         if event == Event::Key(KeyCode::Esc.into()) {
             curslidecnt = 2147483647;
             slides::autocheck(curslidecnt);
             break;
-        }
+        };
         if event == Event::Key(KeyCode::Char('s').into()) {
             curslidecnt = 6;
             slides::autocheck(curslidecnt);
-        }
-    }
+        };
+    };
 Ok(())
 }

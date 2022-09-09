@@ -5,7 +5,6 @@ use crossterm::{
     execute,
     style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor},
 };
-use crossterm::terminal::Clear;
 
 pub fn autocheck(sldnum:i32) {
     match sldnum {
@@ -28,54 +27,63 @@ pub fn mainslide() {
         stdout(),
         SetForegroundColor(Color::White),
         SetBackgroundColor(Color::Black),
-        Print("▄▀█  █▀█ █▀█ █▀█ ░░█ █▀▀ █▀▀ ▀█▀  █▀▀ █▀█ █▀█  █░█ █ █▀ ▀█▀ █▀█ █▀█ █▄█  ▀█▀ █▀█  █▀█ █▀█ █▀▀ █▀ █▀▀ █▄░█ ▀█▀\n█▀█  █▀▀ █▀▄ █▄█ █▄█ ██▄ █▄▄ ░█░  █▀░ █▄█ █▀▄  █▀█ █ ▄█ ░█░ █▄█ █▀▄ ░█░  ░█░ █▄█  █▀▀ █▀▄ ██▄ ▄█ ██▄ █░▀█ ░█░"),
+        Print("▄▀█  █▀█ █▀█ █▀█ ░░█ █▀▀ █▀▀ ▀█▀  █▀▀ █▀█ █▀█  █░█ █ █▀ ▀█▀ █▀█ █▀█ █▄█  ▀█▀ █▀█  █▀█ █▀█ █▀▀ █▀ █▀▀ █▄░█ ▀█▀\r\n█▀█  █▀▀ █▀▄ █▄█ █▄█ ██▄ █▄▄ ░█░  █▀░ █▄█ █▀▄  █▀█ █ ▄█ ░█░ █▄█ █▀▄ ░█░  ░█░ █▄█  █▀▀ █▀▄ ██▄ ▄█ ██▄ █░▀█ ░█░"),
         ResetColor).ok();
 }
 
 pub fn second() {
-    Clear(crossterm::terminal::ClearType::All);
+    clearscreen::clear().expect("err");
     execute!(
         stdout(),
         SetForegroundColor(Color::White),
         SetBackgroundColor(Color::Black),
-        Print(""),
+        Print("
+    - Billy the Kid was born as Henry McCarty in NYC in 1859\r
+    - Born to Catherine and Patrick McCarty soon having a younger brother named Joseph\r
+    - His father suddenly passed away and Catherine took herself and her two sons to Indianapolis\r
+    - During this time Catherine began a romance with a William Antrim\r
+    - Soon after the four moved to Wichita, Kansas, in 1870\r
+    - They then moved to Santa Fe, where Henry's mom would marry Antrim in 1873, and later that same year they moved to Silver City, New Mexico\r
+    - A year later Henry's mom died of tuberculosis leaving Henry and Joseph in the care of their step-father\r
+    - William would beat Henry and with the death of Henry's mother they became even worse as she wasn't there to protect her child.\r
+    - Henry left home and began to live in a boarding house in which he would do work in exchange for living quarters.\r"),
         ResetColor).ok();
 }
 
 pub fn third() {
-    Clear(crossterm::terminal::ClearType::All);
+    clearscreen::clear().expect("err");
     execute!(
         stdout(),
         SetForegroundColor(Color::White),
         SetBackgroundColor(Color::Black),
-        Print(""),
+        Print("deez"),
         ResetColor).ok();
 }
 pub fn fourth() {
-    Clear(crossterm::terminal::ClearType::All);
+    clearscreen::clear().expect("err");
     execute!(
         stdout(),
         SetForegroundColor(Color::White),
         SetBackgroundColor(Color::Black),
-        Print(""),
+        Print("nuts"),
         ResetColor).ok();
 }
 pub fn fifth() {
-    Clear(crossterm::terminal::ClearType::All);
+    clearscreen::clear().expect("err");
     execute!(
         stdout(),
         SetForegroundColor(Color::White),
         SetBackgroundColor(Color::Black),
-        Print(""),
+        Print("hey"),
         ResetColor).ok();
 }
 pub fn sixth() {
-    Clear(crossterm::terminal::ClearType::All);
+    clearscreen::clear().expect("err");
     execute!(
         stdout(),
         SetForegroundColor(Color::White),
         SetBackgroundColor(Color::Black),
-        Print(""),
+        Print("gottem"),
         ResetColor).ok();
 }
 
