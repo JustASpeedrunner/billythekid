@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------
 // Just a line to build for Michaelsoft Binbows so I don't forget
-// cargo build --target x86_64-pc-windows-gnu
+// cargo build --target x86_64-pc-windows-gnu --release
 // -----------------------------------------------------------------
 
 // -----------------------------------------------------------------
@@ -13,7 +13,7 @@ use crossterm::{
     execute, Result,
 };
 use crossterm::event::{
-    KeyboardEnhancementFlags, PopKeyboardEnhancementFlags, PushKeyboardEnhancementFlags, read, DisableBracketedPaste, DisableFocusChange, EnableBracketedPaste, EnableFocusChange, Event, KeyCode,
+    read, DisableBracketedPaste, DisableFocusChange, EnableBracketedPaste, EnableFocusChange, Event, KeyCode,
 };
 mod slides;
 
@@ -33,11 +33,6 @@ fn main() -> Result<()> {
         stdout,
         EnableBracketedPaste,
         EnableFocusChange,
-        PushKeyboardEnhancementFlags(
-            KeyboardEnhancementFlags::DISAMBIGUATE_ESCAPE_CODES
-                | KeyboardEnhancementFlags::REPORT_ALL_KEYS_AS_ESCAPE_CODES
-                | KeyboardEnhancementFlags::REPORT_EVENT_TYPES
-        )
     )?;
 
     if let Err(e) = read_events() {
@@ -47,7 +42,6 @@ fn main() -> Result<()> {
     execute!(
         stdout,
         DisableBracketedPaste,
-        PopKeyboardEnhancementFlags,
         DisableFocusChange,
     )?;
 
@@ -62,10 +56,10 @@ fn read_events() -> Result<()> {
         println!("{:?}",event);
 
         if event == Event::Key(KeyCode::Enter.into()) {
-            if let 0..=5 = curslidecnt {
+            if let 0..=8 = curslidecnt {
                 curslidecnt += 1;
                 slides::autocheck(curslidecnt);
-            } else if curslidecnt >= 6 {
+            } else if curslidecnt >= 9 {
                 curslidecnt = 0;
                 clearscreen::clear().expect("err");
                 slides::autocheck(curslidecnt);
